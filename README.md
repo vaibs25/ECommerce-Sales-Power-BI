@@ -1,111 +1,173 @@
-# -ECommerce-Sales-Power-BI
+# ECommerce-Sales-Power-BI
 
-Problem Description
-For this module, you will now use the measures and modelled data to create visuals. If required, you’ll be creating more measures.
+🛒 E-Commerce Sales Analysis – Power BI
+📌 Project Overview
+
+This project focuses on building an end-to-end Power BI solution for an e-commerce business.
+The objective is to transform raw transactional data, model it correctly for analytics, and finally build business-ready dashboards to analyze sales, customers, products, orders, discounts, and profitability.
+
+The project is executed in three structured modules:
+
+Data Transformation (Power Query)
+
+Data Modeling & Measure Creation (DAX)
+
+Visualization & Business Analysis
+
+🎯 Business Objectives
+
+Categorize discounts and analyze their impact on sales
+
+Build a clean fact table for analysis
+
+Create industry-standard KPIs (AOV, AIPO, ARPC, Profit Margin)
+
+Analyze customer segments, product performance, and order profitability
+
+Deliver executive-ready dashboards
+
+🛠️ Tools & Technologies
+
+Power BI Desktop
+
+Power Query (Data Transformation)
+
+DAX (Measures & KPIs)
+
+GitHub (Version control & documentation)
+
+🔄 Module 1: Data Transformation (Power Query)
+📄 Table: Sales
+➕ Conditional Column – Discount Category
+
+Column Name: Discount Category
+
+Discount = 0%        → No Discount
+Discount ≤ 10%       → Low
+Discount ≤ 25%       → Medium
+Else                 → High
+
+🔗 Table Merging (Final Fact Table)
+
+All merges use Left Join to preserve sales data:
+
+Sales ⟶ Products
+
+Join Key: Product ID
+
+Expanded columns excluding Product ID
+
+Result ⟶ Customers
+
+Join Key: Customer ID
+
+Expanded columns excluding Customer ID
+
+➕ Calculated Columns
+🧮 Product Amount
+Product Amount = Quantity × Product List Price
+
+💰 Sales Amount
+Sales Amount = Product Amount − (Discount × Product Amount)
 
 
-Requirements for visuals on PowerBI :
+✔ Dataset finalized using Close & Apply
 
-Open the Ecommerce_Sales PowerBI file.
+🧩 Module 2: Data Modeling & Measures
+📌 Fact Table
 
-Add additional measures
+Sales
 
-Name - Total Sales All
+🔗 Relationships
+Many-to-One
 
-Name - Total Quantity Sold All
+Sales ↔ Products (Product ID)
 
-Name - Total Orders All
+Sales ↔ Customers (Customer ID)
 
-Name - AOV All
+Sales ↔ Dates (Order Date → Date)
 
-Name - AIPO All
+🔑 Unique Entity Creation
 
-Name - Total Customers All
+Column Name: Order_Line_ID
 
-Name - ARPC All
+Order_Line_ID = [Order ID] & "-" & [Product ID]
 
-Name - Total Discount Given
+📐 Core Measures (DAX)
+Total Sales = SUM(Sales[Sales Amount])
 
-Create Card & Visuals for KPIs page
+Total Quantity Sold = SUM(Sales[Quantity])
 
-Create Charts for Customer & Product page
+Total Orders = DISTINCTCOUNT(Sales[Order ID])
 
-Create Charts for Order & Profit Analysis page
+AOV =
+DIVIDE([Total Sales], [Total Orders])
 
-Save and upload the Power BI file with the completed data visuals.
+AIPO =
+DIVIDE([Total Quantity Sold], [Total Orders])
 
-✅ Steps for PowerBI file submission
-Checklist
-Step & Task Description
+Total Customers =
+DISTINCTCOUNT(Customers[Customer ID])
 
+ARPC =
+DIVIDE([Total Sales], [Total Customers])
 
-In the same file as submitted for previous module : Creating Measures
+📊 Module 3: Advanced Measures
+Total Sales All =
+CALCULATE([Total Sales], ALL(Products))
 
-Home table - Sales
-Create Measures
+Total Quantity Sold All =
+CALCULATE([Total Quantity Sold], ALL(Products))
 
-Name - Total Sales All
+Total Orders All =
+CALCULATE([Total Orders], ALL(Products))
 
-Name - Total Quantity Sold All
+AOV All =
+CALCULATE([AOV], ALL(Products))
 
-Name - Total Orders All
+AIPO All =
+CALCULATE([AIPO], ALL(Products))
 
-Name - AOV All
+Total Customers All =
+CALCULATE([Total Customers], ALL(Customers))
 
-Name - AIPO All
+ARPC All =
+CALCULATE([ARPC], ALL(Customers))
 
-Name - Total Customers All
+Total Discount Given =
+CALCULATE(
+    SUMX(Sales, Sales[Discount] * Sales[Product Amount]),
+    ALL(Products)
+)
 
-Name - ARPC All
+📊 Dashboard Pages
+📄 Page 1 – KPIs
 
-Name - Total Discount Given
+Title: ECommerce Performance – Key Performance Indicators
 
-DAX → CALCULATE(SUMX(Sales, Sales[Discount] * Sales[Product Amount]), ALL(Products))
-Create Card type visuals
+KPI Cards
 
-Total Sales All
+Total Sales / Total Sales All
 
-Total Quantity Sold All
+Total Quantity Sold / Total Quantity Sold All
 
-Total Orders All
+Total Orders / Total Orders All
 
-AOV All
+AOV / AOV All
 
-AIPO All
+AIPO / AIPO All
 
-Total Customers All
+Total Customers / Total Customers All
 
-ARPC All
+ARPC / ARPC All
 
-Total Sales
-
-Total Quantity Sold
-
-Total Orders
-
-AOV
-
-AIPO
-
-Total Customers
-
-ARPC
-
-Add Slicer
-
-Style - Vertical List
-
-Field
+Slicers
 
 Product Category
 
 Product Sub-Category
 
-Create Chart
-
-Type - Table
-
-Columns
+Table
 
 Sub-Category
 
@@ -113,169 +175,104 @@ Total Orders
 
 Total Sales
 
-Create Chart
+Line Chart
 
-Type - Line
+X-Axis: Date Hierarchy (Year → Quarter → Month)
 
-X-Axis - Date Hierarchy (Year, Quarter, Month)
+Y-Axis: Total Sales
 
-Y-Axis - Total Sales
+Secondary Axis: Total Quantity Sold
 
-Secondary Y-Axis - Total Quantities Sold
+📄 Page 2 – Customer & Product
 
-Page 1 Rename Page → "KPIs"
+Title: ECommerce Performance – Customer & Product Segment
 
-Add text on top of page
+Charts
 
-"ECommerce Performance - Key Performance Indicators"
-Add borders to all visuals
+Stacked Bar Chart
 
-Align the KPIs and filter cleanly on the page
+Total Sales by Customer Segment & Region
 
-Create New Page → "Customer & Product"
+Stacked Bar Chart
 
-Add text on top of page
+Total Sales by Product Category & Region
 
-"ECommerce Performance - Customer & Product Segment"
-Create Chart
-
-Type - Stacked bar chart
-
-X-Axis - Total Sales
-
-Y-Axis - Customers Segment
-
-Legend - Region
-
-Title - Total Sales by Regional Customers
-
-Create Chart
-
-Type - Stacked bar chart
-
-X-Axis - Total Sales
-
-Y-Axis - Product Category
-
-Legend - Region
-
-Title - Total Sales by Regional Products
-
-Create Chart
-
-Type - Card (New)
-
-Data
+Card (New)
 
 Total Customers
 
 Total Orders
 
 Total Sales
+(by Customer Segment)
 
-Categories - Customers Segment
-
-Create Chart
-
-Type - Card (New)
-
-Data
+Card (New)
 
 Total Customers
 
 Total Orders
 
 Total Sales
+(by Product Category)
 
-Categories - Products Category
+📄 Page 3 – Order & Profit Analysis
 
-Add borders to all visuals
+Title: ECommerce Performance – Order & Profit Analysis
 
-Align the Charts cleanly on the page
-Create New Page → "Order & Profit Analysis"
+Additional Measures
+Total Profit =
+[Total Sales] - SUMX(Sales, Sales[Discount] * Sales[Product Amount])
 
-Add text on top of page
+Profit Margin =
+DIVIDE([Total Profit], [Total Sales])
 
-"ECommerce Performance - Order & Profit Analysis"
-Create New measures : Home table - Sales
+Average Discount =
+AVERAGE(Sales[Discount])
 
-Name - Total Profit
+Delivery Time =
+DATEDIFF(Sales[Order Date], Sales[Delivery Date], DAY)
 
-DAX → [Total Sales] - SUMX(Sales, Sales[Discount]* Sales[Product Amount])
-Name - Profit Margin
+Average Delivery Time =
+AVERAGE(Sales[Delivery Time])
 
-DAX → [Total Profit] / [Total Sales]
-Name - Average Discount
+Visuals
 
-DAX → AVERAGE(Sales[Discount])
-Name - Delivery Time
+Card: Total Profit, Profit Margin
 
-Difference between Delivery Date and Order Date
+Gauge: Average Discount
 
-Change Type - Whole Number
+Matrix: Discount × Product Category → Total Orders
 
-Name - Average Delivery Time
+Donut Chart: Orders by Ship Mode
 
-Home table - Sales
+Gauge: Average Delivery Time
 
-DAX → AVERAGE(Sales[Delivery Time])
+🚀 Key Business Insights Enabled
 
-Create Card type visuals
+Discount impact on revenue and profitability
 
-Total Profit
+Customer and product contribution to sales
 
-Profit Margin
+Order efficiency and delivery performance
 
-Create Gauge type visuals
+Regional and category-level performance analysis
 
-Value - Average Discount
+📁 Project Files
 
-Minimum value - Min of Discount
+📊 Ecommerce_Sales_Charts.pbix – Power BI dashboard
 
-Maximum value - Max of Discount
+📄 README.md – Project documentation
 
-Create Matrix visual
+🧠 Skills Demonstrated
 
-Rows - Discount (Sorted Desc)
+Power Query Transformations
 
-Columns - Product [Category]
+Data Modeling & Relationships
 
-Values - Total orders
+DAX KPI Design
 
-Create Chart
+E-Commerce Metrics (AOV, AIPO, ARPC)
 
-Type - Donut Chart
+Business Dashboard Design
 
-Legend - Ship Mode
-
-Values - Total orders
-
-Title - Distribution of orders by shipping method
-
-Create Gauge type visuals
-
-Value - Average Delivery Time
-
-Minimum value - Min of Delivery Time
-
-Maximum value - Max of Delivery Time
-
-Add borders to all visuals
-
-Align the Charts cleanly on the page
-Save and Submit:
-
-✅ Steps for PowerBI file submission
-Expected Output
-
-Page 1 - KPIs
-
-image
-
-
-Page 2 - Customer & Product
-
-image
-
-
-Page 3 - Order & Profit Analysis
+Analytical Storytelling
